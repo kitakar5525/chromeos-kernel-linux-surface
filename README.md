@@ -8,6 +8,42 @@ linux-surface kernel for Chromium OS/Chrome OS based OSes.
 
 
 
+<!-- TOC -->
+
+- [chromeos-kernel-linux-surface](#chromeos-kernel-linux-surface)
+    - [How to build a kernel (using `cros_sdk`)](#how-to-build-a-kernel-using-cros_sdk)
+        - [How to retrieve the built kernel and config to your (outside cros_sdk chroot) home directory?](#how-to-retrieve-the-built-kernel-and-config-to-your-outside-cros_sdk-chroot-home-directory)
+        - [extra: build a stock kernel](#extra-build-a-stock-kernel)
+    - [How to build a kernel (using `make` command)](#how-to-build-a-kernel-using-make-command)
+    - [How to install the module and vmlinuz](#how-to-install-the-module-and-vmlinuz)
+    - [kernel config](#kernel-config)
+        - [misc configs from diff with Arch Linux kernel](#misc-configs-from-diff-with-arch-linux-kernel)
+    - [memo](#memo)
+        - [List of boards](#list-of-boards)
+        - [Kernel build log location](#kernel-build-log-location)
+        - [Kernel build cache location](#kernel-build-cache-location)
+    - [Issues](#issues)
+        - [FIXME: Who overrides the kernel config?](#fixme-who-overrides-the-kernel-config)
+        - [FIXME: how to load the compressed modules?](#fixme-how-to-load-the-compressed-modules)
+        - [FIXME: How to install kernel headers for building external modules? How to reduce the size?](#fixme-how-to-install-kernel-headers-for-building-external-modules-how-to-reduce-the-size)
+        - [FIXME: Auto-rotation not working](#fixme-auto-rotation-not-working)
+        - [FIXME: Auto mode change into tablet_mode not working](#fixme-auto-mode-change-into-tablet_mode-not-working)
+        - [FIXME: Taking a screenshot using Pow+VolDown not working](#fixme-taking-a-screenshot-using-powvoldown-not-working)
+        - [FIXME: Module load order for built-in modules](#fixme-module-load-order-for-built-in-modules)
+    - [fixed](#fixed)
+        - [fixed: Direct firmware load for *firmware file* failed with error -2](#fixed-direct-firmware-load-for-firmware-file-failed-with-error--2)
+        - [fixed: Some HID devices stop working after suspend (s2idle) by default](#fixed-some-hid-devices-stop-working-after-suspend-s2idle-by-default)
+        - [fixed: Tap to click not working by default](#fixed-tap-to-click-not-working-by-default)
+        - [fixed: ~~FIXME: Sound not working on Surface 3~~ Managed to work: Sound not working on Surface 3 by default](#fixed-fixme-sound-not-working-on-surface-3-managed-to-work-sound-not-working-on-surface-3-by-default)
+        - [fixed: Sound on Surface Book 1 may not working by default](#fixed-sound-on-surface-book-1-may-not-working-by-default)
+    - [wontfix](#wontfix)
+        - [wontfix: `make` error when `DRM_I915=m` and `INTEL_IPTS=y`](#wontfix-make-error-when-drm_i915m-and-intel_iptsy)
+        - [wontfix: `make` error when `HID=m` and `SURFACE_ACPI=y`](#wontfix-make-error-when-hidm-and-surface_acpiy)
+
+<!-- /TOC -->
+
+
+
 ## How to build a kernel (using `cros_sdk`)
 
 you need to setup `cros_sdk` environment first:

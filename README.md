@@ -79,7 +79,7 @@ export BOARD=amd64-generic
 git add make.defaults
 git commit -m "Update board make profile"
 
-# run this to workon the    build
+# run this to workon the build
 cros_workon --board=${BOARD} start sys-kernel/chromeos-kernel-4_19
 
 

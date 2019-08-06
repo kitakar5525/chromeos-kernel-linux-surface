@@ -4,7 +4,7 @@ linux-surface kernel for Chromium OS/Chrome OS based OSes.
 
 - Intended for **Surface Book 1 (especially, with Performance Base)** and **Surface 3**, but all patches (or equivalent) from [jakeday repository](https://github.com/jakeday/linux-surface) are applied
 
-- Patchset for chromeos is here: [kitakar5525/linux-surface-patches](https://github.com/kitakar5525/linux-surface-patches)
+- Patches/config for chromeos kernel is here: [kitakar5525/linux-surface-patches](https://github.com/kitakar5525/linux-surface-patches)
 
 
 

@@ -132,7 +132,7 @@ exit # (outside cros_sdk)
 export WORKING_BRANCH=chromeos-surface
 cd /home/ubuntu/chromiumos/src/third_party/kernel/v4.19
 kver=$(make kernelversion); echo $kver
-export MODULE_EXPORT_DIR=~/chromeos-kernel-$kver
+export MODULE_EXPORT_DIR=~/chromeos-kernel-linux-surface-$kver
 mkdir $MODULE_EXPORT_DIR
 
 ### extra: if you want, copy default configs

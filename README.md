@@ -357,8 +357,8 @@ Embed firmware
 #If you specify ipts firmwares here, remember to copy `/lib/firmware/intel/ipts` to your build machine.
 #Or if you are in cros_sdk, `$HOME/chromiumos/chroot/build/amd64-generic/lib/firmware`.
 #- CONFIG_EXTRA_FIRMWARE='i915/skl_dmc_ver1_27.bin i915/skl_huc_ver01_07_1398.bin i915/skl_guc_ver9_33.bin intel/ipu3-fw.bin intel/ipts/config.bin intel/ipts/intel_desc.bin intel/ipts/vendor_desc.bin intel/ipts/vendor_kernel.bin intel/fw_sst_0f28.bin intel/fw_sst_0f28.bin-48kHz_i2s_master intel/fw_sst_0f28_ssp0.bin intel/fw_sst_22a8.bin'
-# stopped embedding IPTS firmware for now
-- CONFIG_EXTRA_FIRMWARE='i915/* intel/*'
+# stopped embedding firmware except intel/ipu3-fw.bin for now
+CONFIG_EXTRA_FIRMWARE='intel/ipu3-fw.bin'
 # - CONFIG_EXTRA_FIRMWARE_DIR='/lib/firmware'
 - CONFIG_EXTRA_FIRMWARE_DIR='/build/amd64-generic/lib/firmware/' # if you are in cros_sdk
 

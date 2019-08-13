@@ -137,7 +137,8 @@ export MODULE_EXPORT_DIR=~/chromeos-kernel-linux-surface-$kver
 mkdir $MODULE_EXPORT_DIR
 
 ### extra: if you want, copy default configs
-git checkout - # back to the branch where your branch derived
+export STOCK_BRANCH=m/master
+git checkout $STOCK_BRANCH # back to the branch where your branch derived
 kver_default=$(git describe --tags | sed 's/-/.r/; s/-g/./')
 mkdir $MODULE_EXPORT_DIR/configs-$kver_default-default
 chromeos/scripts/prepareconfig chromiumos-x86_64 && make olddefconfig # generate default .config file
@@ -165,7 +166,8 @@ rm -rf $MODULE_EXPORT_DIR/modules
 cros_sdk # (inside cros_sdk)
 export BOARD=amd64-generic
 cd ~/trunk/src/third_party/kernel/v4.19
-git checkout - # back to the branch where your branch derived
+export STOCK_BRANCH=m/master
+git checkout $STOCK_BRANCH # back to the branch where your branch derived
 make mrproper
 cros_workon_make --board=${BOARD} chromeos-kernel-4_19 --install
 ### copy the built kernel

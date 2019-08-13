@@ -129,6 +129,7 @@ FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-kernel-4_19 --inst
 ```bash
 ### Copy the built kernel
 exit # (outside cros_sdk)
+export BOARD=amd64-generic
 export WORKING_BRANCH=chromeos-surface
 cd /home/ubuntu/chromiumos/src/third_party/kernel/v4.19
 kver=$(make kernelversion); echo $kver
@@ -146,9 +147,10 @@ make mrproper
 git checkout $WORKING_BRANCH # back to your working branch
 
 cd ~
-cp -r $HOME/chromiumos/chroot/build/amd64-generic/boot $MODULE_EXPORT_DIR
-cp -r $HOME/chromiumos/chroot/build/amd64-generic/lib/modules $MODULE_EXPORT_DIR
+cp -r $HOME/chromiumos/chroot/build/$BOARD/boot $MODULE_EXPORT_DIR
+cp -r $HOME/chromiumos/chroot/build/$BOARD/lib/modules $MODULE_EXPORT_DIR
 cp -r $HOME/chromiumos/src/third_party/kernel/v4.19/chromeos/config $MODULE_EXPORT_DIR
+
 cd $MODULE_EXPORT_DIR
 tar -czf modules.tar.gz modules
 cd -
@@ -175,8 +177,8 @@ export MODULE_EXPORT_DIR=~/modules-$kver_default-stock
 mkdir $MODULE_EXPORT_DIR
 make mrproper
 cd ~
-cp -r $HOME/chromiumos/chroot/build/amd64-generic/boot $MODULE_EXPORT_DIR
-cp -r $HOME/chromiumos/chroot/build/amd64-generic/lib/modules $MODULE_EXPORT_DIR
+cp -r $HOME/chromiumos/chroot/build/$BOARD/boot $MODULE_EXPORT_DIR
+cp -r $HOME/chromiumos/chroot/build/$BOARD/lib/modules $MODULE_EXPORT_DIR
 cp -r $HOME/chromiumos/src/third_party/kernel/v4.19/chromeos/config $MODULE_EXPORT_DIR
 cd $MODULE_EXPORT_DIR
 tar -czf modules.tar.gz modules

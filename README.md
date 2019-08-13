@@ -151,6 +151,8 @@ cd ~
 cp -r $HOME/chromiumos/chroot/build/$BOARD/boot $MODULE_EXPORT_DIR
 cp -r $HOME/chromiumos/chroot/build/$BOARD/lib/modules $MODULE_EXPORT_DIR
 cp -r $HOME/chromiumos/src/third_party/kernel/v4.19/chromeos/config $MODULE_EXPORT_DIR
+# for external module building, retrieve Module.symvers
+cp -r $HOME/chromiumos/chroot/build/$BOARD/var/cache/portage/sys-kernel/chromeos-kernel-4_19/Module.symvers $MODULE_EXPORT_DIR/modules/$kver
 
 cd $MODULE_EXPORT_DIR
 tar -czf modules.tar.gz modules

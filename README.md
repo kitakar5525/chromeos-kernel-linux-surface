@@ -379,6 +379,10 @@ Testing
 - CONFIG_SURFACE3_WMI [=m]
 # Touchscreen sometimes not working after suspend (s2idle) on Surface 3
 - TOUCHSCREEN_SURFACE3_SPI [=m]
+- CONFIG_SPI_PXA2XX [=m]
+# I feel surface3_power is blocking S0ix on Surface 3 (?)
+- SURFACE_3_POWER_OPREGION [=m]
+
 - INTEL_PMC_IPC
 # VirtualBox guest
     # [VirtualBox - Gentoo Wiki](https://wiki.gentoo.org/wiki/VirtualBox#Kernel_configuration)

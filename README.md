@@ -368,21 +368,11 @@ CONFIG_EXTRA_FIRMWARE='intel/ipu3-fw.bin'
 # - CONFIG_EXTRA_FIRMWARE_DIR='/lib/firmware'
 - CONFIG_EXTRA_FIRMWARE_DIR='/build/amd64-generic/lib/firmware/' # if you are in cros_sdk
 
-Fix HID related errors after s2idle
-- HID [=m] dependency:
-  - I2C_HID [=m]
-  - USB_HID [=m]
-- CONFIG_SURFACE_ACPI [=m] # need to be as module when HID [=m] or build will fail
+Fix HID related errors after s2idle (to reload module after suspend)
+- I2C_HID [=m]
+- USB_HID [=m]
 
 Testing
-# Type Cover not working/prevents S0ix state after suspend (s2idle) on Surface 3
-- CONFIG_SURFACE3_WMI [=m]
-# Touchscreen sometimes not working after suspend (s2idle) on Surface 3
-- TOUCHSCREEN_SURFACE3_SPI [=m]
-- CONFIG_SPI_PXA2XX [=m]
-# I feel surface3_power is blocking S0ix on Surface 3 (?)
-- SURFACE_3_POWER_OPREGION [=m]
-
 - INTEL_PMC_IPC
 # VirtualBox guest
     # [VirtualBox - Gentoo Wiki](https://wiki.gentoo.org/wiki/VirtualBox#Kernel_configuration)

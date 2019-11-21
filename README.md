@@ -28,6 +28,9 @@ linux-surface kernel for Chromium OS/Chrome OS based OSes.
         - [Tap to click not working by default](#tap-to-click-not-working-by-default)
         - [~~FIXME: Sound not working on Surface 3~~ Managed to work: Sound not working on Surface 3 by default](#fixme-sound-not-working-on-surface-3-managed-to-work-sound-not-working-on-surface-3-by-default)
         - [Sound on Surface Book 1 may not working by default](#sound-on-surface-book-1-may-not-working-by-default)
+        - [Auto-rotation not working (#5)](#auto-rotation-not-working-5)
+        - [Auto mode change into tablet_mode not working (#6)](#auto-mode-change-into-tablet_mode-not-working-6)
+        - [Taking a screenshot using Pow+VolDown not working (#7)](#taking-a-screenshot-using-powvoldown-not-working-7)
 
 <!-- /TOC -->
 
@@ -567,3 +570,35 @@ You may need to comment out the line in a file `/etc/modprobe.d/alsa-skl.conf`
 ```
 blacklist snd_hda_intel
 ```
+
+### Auto-rotation not working (#5)
+While auto rotation is not working, you can rotate your screen by:
+
+If you are in tablet_mode:
+    - Use this android app: [azw413/ChromeOSRotate: Android App to rotate orientation on Chrome Tablets](https://github.com/azw413/ChromeOSRotate)
+
+If you are not in tablet_mode:
+    - `Ctrl+Shift+Reload` (`Ctrl+Shift+Super(Win)+F3`)
+
+### Auto mode change into tablet_mode not working (#6)
+While auto mode change is not working, you can manually change the mode by keyboard.
+
+To do so, add a flag `--ash-debug-shortcuts` to your `/etc/chrome_dev.conf`,
+then restart your ui `sudo restart ui`, after that, you can change the mode by `Ctrl+Alt+Shift+T`.
+
+```bash
+# mount root filesystem as writable
+sudo mount / -o rw,remount
+```
+
+```bash
+# Edit this file
+sudo vim /etc/chrome_dev.conf
+```
+
+### Taking a screenshot using Pow+VolDown not working (#7)
+While that function not working, you can take a screenshot without keyboard by
+- Settings -> Device -> Stylus -> Show stylus tools in the shelf
+
+and in the stylus tools, choose "Capture screen".
+However, if you "Autohide shelf", the screenshot is taken before the shelf is completely hidden.

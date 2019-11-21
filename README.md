@@ -518,7 +518,7 @@ i2c_hid i2c-MSHW0030:00: failed to retrieve report from device.
 ```
 
 Then, build `HID` as module (`I2C_HID`=m is not sufficient (?) in my case)
-and reload the module ``sudo modprobe -r i2c_hid && sudo modprobe i2c_hid`
+and reload the module `sudo modprobe -r i2c_hid && sudo modprobe i2c_hid`
 
 ### Tap to click not working by default
 

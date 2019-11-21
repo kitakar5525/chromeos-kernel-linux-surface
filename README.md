@@ -22,20 +22,12 @@ linux-surface kernel for Chromium OS/Chrome OS based OSes.
         - [List of boards](#list-of-boards)
         - [Kernel build log location](#kernel-build-log-location)
         - [Kernel build cache location](#kernel-build-cache-location)
-    - [Issues](#issues)
-        - [FIXME: Who overrides the kernel config?](#fixme-who-overrides-the-kernel-config)
-        - [FIXME: how to load the compressed modules?](#fixme-how-to-load-the-compressed-modules)
-        - [FIXME: How to install kernel headers for building external modules? How to reduce the size?](#fixme-how-to-install-kernel-headers-for-building-external-modules-how-to-reduce-the-size)
-        - [FIXME: Auto-rotation not working](#fixme-auto-rotation-not-working)
-        - [FIXME: Auto mode change into tablet_mode not working](#fixme-auto-mode-change-into-tablet_mode-not-working)
-        - [FIXME: Taking a screenshot using Pow+VolDown not working](#fixme-taking-a-screenshot-using-powvoldown-not-working)
-        - [FIXME: Module load order for built-in modules](#fixme-module-load-order-for-built-in-modules)
-    - [fixed](#fixed)
-        - [fixed: Direct firmware load for *firmware file* failed with error -2](#fixed-direct-firmware-load-for-firmware-file-failed-with-error--2)
-        - [fixed: Some HID devices stop working after suspend (s2idle) by default](#fixed-some-hid-devices-stop-working-after-suspend-s2idle-by-default)
-        - [fixed: Tap to click not working by default](#fixed-tap-to-click-not-working-by-default)
-        - [fixed: ~~FIXME: Sound not working on Surface 3~~ Managed to work: Sound not working on Surface 3 by default](#fixed-fixme-sound-not-working-on-surface-3-managed-to-work-sound-not-working-on-surface-3-by-default)
-        - [fixed: Sound on Surface Book 1 may not working by default](#fixed-sound-on-surface-book-1-may-not-working-by-default)
+    - [Notes](#notes)
+        - [Direct firmware load for *firmware file* failed with error -2](#direct-firmware-load-for-firmware-file-failed-with-error--2)
+        - [Some HID devices stop working after suspend (s2idle) by default](#some-hid-devices-stop-working-after-suspend-s2idle-by-default)
+        - [Tap to click not working by default](#tap-to-click-not-working-by-default)
+        - [~~FIXME: Sound not working on Surface 3~~ Managed to work: Sound not working on Surface 3 by default](#fixme-sound-not-working-on-surface-3-managed-to-work-sound-not-working-on-surface-3-by-default)
+        - [Sound on Surface Book 1 may not working by default](#sound-on-surface-book-1-may-not-working-by-default)
 
 <!-- /TOC -->
 
@@ -505,107 +497,9 @@ Especially, board `amd64-generic` is located at
 
 
 
-## Issues
+## Notes
 
-### FIXME: Who overrides the kernel config?
-
-When building using `cros_workon_make`, kernel config may be overritten by someone:
-```
->>> Configuring source in /build/amd64-generic/tmp/portage/sys-kernel/chromeos-kernel-4_19-9999/work/chromeos-kernel-4_19-9999 ...
- * Using kernel config: chromiumos-x86_64
- *    - enabling Enable ACPI AC config
- *    - disabling framebuffer console config
- *    - enabling Support running virtual machines with KVM config
- *    - enabling CDC MBIM driver config
- *    - enabling TPM support config
- *    - enabling Transparent Hugepage Support config
- *    - enabling Virtual USB support config
- *    - enabling Virtual Video Test Driver config
- *    - enabling 802.1Q VLAN config
- *    - disabling VT console config
-make -j8 O=/build/amd64-generic/var/cache/portage/sys-kernel/chromeos-kernel-4_19 LD=/usr/x86_64-pc-linux-gnu/x86_64-cros-linux-gnu/binutils-bin/2.27.0/ld 'CC=x86_64-cros-linux-gnu-clang -B/usr/x86_64-pc-linux-gnu/x86_64-cros-linux-gnu/binutils-bin/2.27.0' 'CXX=x86_64-cros-linux-gnu-clang++ -B/usr/x86_64-pc-linux-gnu/x86_64-cros-linux-gnu/binutils-bin/2.27.0' HOSTCC=x86_64-pc-linux-gnu-clang HOSTCXX=x86_64-pc-linux-gnu-clang++ olddefconfig 
-make[1]: Entering directory '/build/amd64-generic/var/cache/portage/sys-kernel/chromeos-kernel-4_19'
-  GEN     ./Makefile
-scripts/kconfig/conf  --olddefconfig Kconfig
-.config:5211:warning: override: reassigning to symbol ACPI_AC
-.config:5214:warning: override: reassigning to symbol FRAMEBUFFER_CONSOLE
-.config:5223:warning: override: reassigning to symbol KVM
-.config:5230:warning: override: reassigning to symbol VSOCKETS
-.config:5232:warning: override: reassigning to symbol VIRTUALIZATION
-.config:5236:warning: override: reassigning to symbol USB_NET_CDC_MBIM
-.config:5239:warning: override: reassigning to symbol TCG_TPM
-.config:5240:warning: override: reassigning to symbol TCG_TIS
-.config:5244:warning: override: reassigning to symbol TRANSPARENT_HUGEPAGE
-.config:5248:warning: override: reassigning to symbol USBIP_CORE
-.config:5252:warning: override: reassigning to symbol VIDEO_VIVID
-.config:5256:warning: override: reassigning to symbol VLAN_8021Q
-.config:5259:warning: override: reassigning to symbol VT
-.config:5260:warning: override: reassigning to symbol VT_CONSOLE
-#
-# configuration written to .config
-#
-make[1]: Leaving directory '/build/amd64-generic/var/cache/portage/sys-kernel/chromeos-kernel-4_19'
->>> Source configured.
-```
-
-```
-[ebuild  N     ] sys-kernel/chromeos-kernel-4_4-4.4.176-r1836::chromiumos to /build/eve/ USE="clang eve_bt_hacks eve_wifi_etsi fit_compression_kernel_lz4 kvm_host mbim tpm2 transparent_hugepage vlan -acpi_ac -allocator_slab -apex -apply_patches -asan -binder -blkdevram -boot_dts_device_tree -buildtest -builtin_fw_amdgpu -builtin_fw_t124_xusb -builtin_fw_t210_bpmp -builtin_fw_t210_nouveau -builtin_fw_t210_xusb -ca0132 -cec -cifs -criu -cros_ec_mec -cros_host -debug -debugobjects -devdebug -device_tree -diskswap -dm_snapshot -dmadebug -dp_cec -dwc2_dual_role -dyndebug -factory_netboot_ramfs -factory_shim_ramfs -fbconsole -firmware_install -fit_compression_kernel_lzma -gdmwimax -gobi -goldfish -highmem -i2cdev -iscsi -kasan -kcov -kexec_file -kgdb -kmemleak -kvm -lockdebug -lxc -memory_debug -module_sign -nfc -nfs -nowerror -pca954x -pcserial -plan9 -ppp -pvrdebug -qmi -realtekpstor -recovery_ramfs -samsung_serial -selinux_develop -socketmon -systemtap -test -tpm -ubsan -unibuild -usb_gadget -usb_gadget_acm -usb_gadget_audio -usb_gadget_ncm -usbip -vfat -virtio_balloon -vivid -vtconsole -wifi_diag -wifi_testbed_ap -wilco_ec -wireless318 -wireless34 -wireless38 -wireless42 -x32" BOARD_USE="eve -acorn -amd64-corei7 -amd64-generic -amd64-generic-cheets -amd64-generic-goofy -amd64-generic_embedded -amd64-generic_mobbuild -amd64-host -aplrvp -aries -arkham -arm-generic -arm64-generic -arm64-llvmpipe -asuka -atlas -auron -auron_paine -auron_pearlvalley -auron_yuna -banjo -banon -bayleybay -beaglebone -beaglebone_servo -beaglebone_vv1 -beltino -betty -betty-arc64 -betty-arcmaster -betty-arcnext -blackwall -bob -bobcat -bolt -bruteus -buddy -butterfly -bwtm2 -candy -capri -capri-zfpga -cardhu -caroline -caroline-arc64 -caroline-arcnext -caroline-ndktranslation -caroline-userdebug -cave -celes -celes-cheets -chell -chell-cheets -cheza -cheza-freedreno -cid -clapper -cmlrvp -cnlrvp -cobblepot -coral -cosmos -cranky -cyan -cyan-cheets -cyclone -daisy -daisy_embedded -daisy_skate -daisy_snow -daisy_spring -daisy_winter -dalmore -danger -danger_embedded -dragonegg -duck -edgar -elm -elm-cheets -enguarde -eve-arcnext -eve-arcvm -eve-campfire -eve-kvm -eve-swap -eve-userdebug -expresso -falco -falco_gles -falco_li -fb1 -fizz -fizz-accelerator -fizz-labstation -fizz-moblab -flapjack -foster -gale -gandof -glados -glados-cheets -glimmer -glimmer-cheets -glkrvp -gnawty -gonzo -gru -grunt -guado -guado-accelerator -guado-macrophage -guado_labstation -guado_moblab -hana -hatch -heli -hsb -iclrvp -ironhide -jadeite -jecht -kalista -kayle -kblrvp -kefka -kevin -kevin-arcnext -kevin-tpm2 -kevin64 -kidd -kip -klang -kukui -kunimitsu -lakitu -lakitu-gpu -lakitu-nc -lakitu-st -lakitu_mobbuild -lakitu_next -lars -laser -lasilla-ground -lassen -leon -link -littlejoe -loonix -lulu -lulu-cheets -lumpy -mappy -mappy_flashstation -marble -mccloud -meowth -metis -minnowboard -mipseb-n32-generic -mipseb-n64-generic -mipseb-o32-generic -mipsel-n32-generic -mipsel-n64-generic -mipsel-o32-generic -mistral -moblab-generic-vm -monroe -moose -nami -nautilus -nefario -ninja -nocturne -novato -novato-arc64 -novato-arcnext -nyan -nyan_big -nyan_blaze -nyan_kitty -oak -oak-cheets -octavius -octopus -orco -panda -panther -panther_embedded -panther_goofy -panther_moblab -parrot -parrot32 -parrot64 -parrot_ivb -pbody -peach -peach_kirby -peach_pi -peach_pit -peppy -plaso -poppy -ppcbe-32-generic -ppcbe-64-generic -ppcle-32-generic -ppcle-64-generic -puppy -purin -pyro -quawks -rainier -rambi -rammus -raspberrypi -reef -reks -relm -reptile -rikku -rizer -romer -rotor -rowan -rush -rush_ryu -sama5d3 -samus -samus-cheets -samus-kernelnext -sand -sarien -scarlet -scarlet-arcnext -sentry -setzer -shogun -sklrvp -slippy -smaug -smaug-cheets -smaug-kasan -snappy -sonic -soraka -squawks -stelvio -storm -storm_nand -stout -strago -stumpy -stumpy_moblab -stumpy_pico -sumo -swanky -tael -tails -tatl -tegra3-generic -terra -tidus -tricky -ultima -umaro -veyron -veyron_fievel -veyron_gus -veyron_jaq -veyron_jerry -veyron_mickey -veyron_mighty -veyron_minnie -veyron_minnie-cheets -veyron_nicky -veyron_pinky -veyron_remy -veyron_rialto -veyron_shark -veyron_speedy -veyron_speedy-cheets -veyron_thea -veyron_tiger -viking -whirlwind -whlrvp -winky -wizpig -wolf -wooten -wsb -x30evb -x32-generic -x86-agz -x86-alex -x86-alex32 -x86-alex32_he -x86-alex_he -x86-alex_hubble -x86-dogfood -x86-generic -x86-generic_embedded -x86-mario -x86-mario64 -x86-zgb -x86-zgb32 -x86-zgb32_he -x86-zgb_he -zako -zoombini" 475 KiB
-```
-
-### FIXME: how to load the compressed modules?
-I can compress the modules:
-```
-CONFIG_MODULE_COMPRESS=y
-CONFIG_MODULE_COMPRESS_GZIP=y
-```
-but chromiumos won't load the compressed modules.
-
-### FIXME: How to install kernel headers for building external modules? How to reduce the size?
-
-### FIXME: Auto-rotation not working
-While auto rotation is not working, you can rotate your screen by:
-
-If you are in tablet_mode:
-    - Use this android app: [azw413/ChromeOSRotate: Android App to rotate orientation on Chrome Tablets](https://github.com/azw413/ChromeOSRotate)
-
-If you are not in tablet_mode:
-    - `Ctrl+Shift+Reload` (`Ctrl+Shift+Super(Win)+F3`)
-
-### FIXME: Auto mode change into tablet_mode not working
-While auto mode change is not working, you can manually change the mode by keyboard.
-
-To do so, add a flag `--ash-debug-shortcuts` to your `/etc/chrome_dev.conf`,
-then restart your ui `sudo restart ui`, after that, you can change the mode by `Ctrl+Alt+Shift+T`.
-
-```bash
-# mount root filesystem as writable
-sudo mount / -o rw,remount
-```
-
-```bash
-# Edit a file
-sudo vim /etc/chrome_dev.conf
-```
-
-### FIXME: Taking a screenshot using Pow+VolDown not working
-
-### FIXME: Module load order for built-in modules
-To adjust the backlight on Surface 3, we need to build `i915` as not built-in but module.
-Maybe the cause of this problem is that `i915` will be loaded too early when built as built-in.
-
-For now, I have to build `DRM_I915` and modules which depend on it as module.
-
-```
-- DRM_I915
-  - CONFIG_HDMI_LPE_AUDIO
-  - INTEL_IPTS
-```
-
-
-
-## fixed
-
-### fixed: Direct firmware load for *firmware file* failed with error -2
+### Direct firmware load for *firmware file* failed with error -2
 
 The message will appear when the driver is built as built-in maybe because the driver loads too early and root filesystem is not mounted yet.
 
@@ -616,7 +510,7 @@ Build the driver as module or use `CONFIG_EXTRA_FIRMWARE`
 References
 - [[SOLVED] LFS - direct firmware load failed error -2](https://www.linuxquestions.org/questions/linux-from-scratch-13/lfs-direct-firmware-load-failed-error-2-a-4175587686/#post5594478)
 
-### fixed: Some HID devices stop working after suspend (s2idle) by default
+### Some HID devices stop working after suspend (s2idle) by default
 
 You may see some logs after s2idle in `dmesg` like this:
 ```
@@ -626,7 +520,7 @@ i2c_hid i2c-MSHW0030:00: failed to retrieve report from device.
 Then, build `HID` as module (`I2C_HID`=m is not sufficient (?) in my case)
 and reload the module ``sudo modprobe -r i2c_hid && sudo modprobe i2c_hid`
 
-### fixed: Tap to click not working by default
+### Tap to click not working by default
 
 Edit `/etc/gesture/40-touchpad-cmt.conf`
 ```diff
@@ -644,7 +538,7 @@ then `sudo restart ui`
 References:
 - [Problem With alps touchpad ? Issue #128 ? arnoldthebat/chromiumos](https://github.com/arnoldthebat/chromiumos/issues/128)
 
-### fixed: ~~FIXME: Sound not working on Surface 3~~ Managed to work: Sound not working on Surface 3 by default
+### ~~FIXME: Sound not working on Surface 3~~ Managed to work: Sound not working on Surface 3 by default
 `dmesg` says:
 ```
 Audio Port: ASoC: no backend DAIs enabled for Audio Port
@@ -668,7 +562,7 @@ If it is still not working, you may manually switch Speaker or Headphones:
 References:
 [ALSA (chtrt5645/HdmiLpeAudio) no audio / Newbie Corner / Arch Linux Forums](https://bbs.archlinux.org/viewtopic.php?id=239674)
 
-### fixed: Sound on Surface Book 1 may not working by default
+### Sound on Surface Book 1 may not working by default
 You may need to comment out the line in a file `/etc/modprobe.d/alsa-skl.conf`
 ```
 blacklist snd_hda_intel

@@ -36,9 +36,6 @@ linux-surface kernel for Chromium OS/Chrome OS based OSes.
         - [fixed: Tap to click not working by default](#fixed-tap-to-click-not-working-by-default)
         - [fixed: ~~FIXME: Sound not working on Surface 3~~ Managed to work: Sound not working on Surface 3 by default](#fixed-fixme-sound-not-working-on-surface-3-managed-to-work-sound-not-working-on-surface-3-by-default)
         - [fixed: Sound on Surface Book 1 may not working by default](#fixed-sound-on-surface-book-1-may-not-working-by-default)
-    - [wontfix](#wontfix)
-        - [wontfix: `make` error when `DRM_I915=m` and `INTEL_IPTS=y`](#wontfix-make-error-when-drm_i915m-and-intel_iptsy)
-        - [wontfix: `make` error when `HID=m` and `SURFACE_ACPI=y`](#wontfix-make-error-when-hidm-and-surface_acpiy)
 
 <!-- /TOC -->
 
@@ -676,42 +673,3 @@ You may need to comment out the line in a file `/etc/modprobe.d/alsa-skl.conf`
 ```
 blacklist snd_hda_intel
 ```
-
-
-
-## wontfix
-
-### wontfix: `make` error when `DRM_I915=m` and `INTEL_IPTS=y`
-
-```
-ld: drivers/misc/ipts/ipts-gfx.o: in function `connect_gfx':
-/tmp/mnt/nvme0n1/5525-build/chromeos-4.19/drivers/misc/ipts/ipts-gfx.c:54: undefined reference to `intel_ipts_connect'
-ld: drivers/misc/ipts/ipts-gfx.o: in function `disconnect_gfx':
-/tmp/mnt/nvme0n1/5525-build/chromeos-4.19/drivers/misc/ipts/ipts-gfx.c:67: undefined reference to `intel_ipts_disconnect'
-make: *** [Makefile:1031: vmlinux] Error 1
-```
-
-Build `INTEL_IPTS` as module when you build `DRM_I915` as module.
-
-### wontfix: `make` error when `HID=m` and `SURFACE_ACPI=y`
-
-```
-drivers/platform/x86/surface_acpi.o: In function `surfacegen5_vhf_create_hid_device':
-/mnt/host/source/src/third_party/kernel/v4.19/drivers/platform/x86/surface_acpi.c:2689: undefined reference to `hid_allocate_device'
-drivers/platform/x86/surface_acpi.o: In function `surfacegen5_acpi_vhf_probe':
-/mnt/host/source/src/third_party/kernel/v4.19/drivers/platform/x86/surface_acpi.c:2759: undefined reference to `hid_add_device'
-/mnt/host/source/src/third_party/kernel/v4.19/drivers/platform/x86/surface_acpi.c:2786: undefined reference to `hid_destroy_device'
-drivers/platform/x86/surface_acpi.o: In function `surfacegen5_acpi_vhf_remove':
-/mnt/host/source/src/third_party/kernel/v4.19/drivers/platform/x86/surface_acpi.c:2801: undefined reference to `hid_destroy_device'
-drivers/platform/x86/surface_acpi.o: In function `surfacegen5_vhf_event_handler':
-/mnt/host/source/src/third_party/kernel/v4.19/drivers/platform/x86/surface_acpi.c:2712: undefined reference to `hid_input_report'
-drivers/platform/x86/surface_acpi.o: In function `vhf_hid_parse':
-/mnt/host/source/src/third_party/kernel/v4.19/drivers/platform/x86/surface_acpi.c:2655: undefined reference to `hid_parse_report'
-make[1]: *** [/mnt/host/source/src/third_party/kernel/v4.19/Makefile:1035: vmlinux] Error 1
-make[1]: Target '_all' not remade because of errors.
-make[1]: Leaving directory '/build/amd64-generic/var/cache/portage/sys-kernel/chromeos-kernel-4_19'
-make: *** [Makefile:146: sub-make] Error 2
-make: Target '_all' not remade because of errors.
-```
-
-Build `SURFACE_ACPI` as module when you build `HID` as module.

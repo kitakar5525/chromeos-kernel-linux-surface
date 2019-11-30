@@ -115,7 +115,11 @@ git commit -m "Update configs for Surface devices"
 
 # build the kernel!
 make mrproper
-FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-kernel-4_19 --install
+# FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-kernel-4_19 --install
+# you can change USE flags. See kitakar5525/chromeos-kernel-linux-surface#2
+# remove `tpm` flag to avoid TCG_TIS=y in order to get chrome://flags/ page working on SB1
+# untill we can use hardware tpm.
+USE="${USE} -tpm" FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-kernel-4_19 --install
 ```
 
 

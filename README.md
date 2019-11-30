@@ -285,11 +285,6 @@ Surface related kernel configs
   - SERIAL_8250_DW
   - SERIAL_DEV_CTRL_TTYPORT
 
-Skylake related
-#- search by SKYLAKE and SKL
-#- SND_SOC_INTEL_SKYLAKE_SSP_CLK
-#  - SND_SOC_INTEL_KBL_RT5663_MAX98927_MACH
-
 Cherry Trail related
 - All items found by searching CHERRY, Crystal
 - All items found by searching CHT except SND related things
@@ -309,7 +304,6 @@ Cherry Trail related
 Atom SoC sound related
 - CONFIG_SND_SST_ATOM_HIFI2_PLATFORM [=m]
 - CONFIG_SND_SST_ATOM_HIFI2_PLATFORM_PCI [=m]
-#- CONFIG_SND_SST_ATOM_HIFI2_PLATFORM_ACPI [=m]
 
 Sound on Surface 3
 - CONFIG_SND_SOC_INTEL_CHT_BSW_RT5645_MACH
@@ -322,7 +316,7 @@ Backlight control on Surface 3
 - CONFIG_PWM_CRC
   - INTEL_SOC_PMIC
 - DRM_I915=m
-  - INTEL_IPTS=m # need to be as module or `make` will fail when `DRM_I915=m`
+  - INTEL_IPTS=m
 
 For IPTS on SB1 to work
 - DRM_I915=m

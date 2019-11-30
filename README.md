@@ -104,7 +104,9 @@ for i in $(find ../linux-surface-patches/patch-chromeos-4.19 -name "*.patch" | s
 # edit a config[4] found above; in my case, chromiumsos-x86_64:
 #chromeos/scripts/kernelconfig editconfig
 # Or, use my config files
-cp -r ../linux-surface-patches/patch-chromeos-4.19/configs/config-surface/config chromeos/
+cp -r ../linux-surface-patches/patch-chromeos-4.19/configs/config-surface/config/base.config chromeos/config
+cp -r ../linux-surface-patches/patch-chromeos-4.19/configs/config-surface/config/x86_64/chromiumos-x86_64.flavour.config chromeos/config/x86_64
+cp -r ../linux-surface-patches/patch-chromeos-4.19/configs/config-surface/config/x86_64/common.config chromeos/config/x86_64
 # If you use my config, make sure CONFIG_EXTRA_FIRMWARE_DIR='/build/amd64-generic/lib/firmware/'
 
 # commit your changes

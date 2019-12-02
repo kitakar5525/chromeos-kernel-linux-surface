@@ -121,9 +121,10 @@ USE="${USE} -tpm" FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-
 ```bash
 ### Copy the built kernel
 exit # (outside cros_sdk)
+export REPO_DIR=$(pwd)
 export BOARD=amd64-generic
 export WORKING_BRANCH=chromeos-surface
-cd /home/ubuntu/chromiumos/src/third_party/kernel/v4.19
+cd $REPO_DIR/src/third_party/kernel/v4.19
 kver=$(make kernelversion); echo $kver
 export MODULE_EXPORT_DIR=~/chromeos-kernel-linux-surface-$kver
 mkdir $MODULE_EXPORT_DIR
@@ -140,11 +141,11 @@ make mrproper
 git checkout $WORKING_BRANCH # back to your working branch
 
 cd ~
-cp -r $HOME/chromiumos/chroot/build/$BOARD/boot $MODULE_EXPORT_DIR
-cp -r $HOME/chromiumos/chroot/build/$BOARD/lib/modules $MODULE_EXPORT_DIR
-cp -r $HOME/chromiumos/src/third_party/kernel/v4.19/chromeos/config $MODULE_EXPORT_DIR
+cp -r $REPO_DIR/chroot/build/$BOARD/boot $MODULE_EXPORT_DIR
+cp -r $REPO_DIR/chroot/build/$BOARD/lib/modules $MODULE_EXPORT_DIR
+cp -r $REPO_DIR/src/third_party/kernel/v4.19/chromeos/config $MODULE_EXPORT_DIR
 # for external module building, retrieve Module.symvers
-cp -r $HOME/chromiumos/chroot/build/$BOARD/var/cache/portage/sys-kernel/chromeos-kernel-4_19/Module.symvers $MODULE_EXPORT_DIR/modules/$kver
+cp -r $REPO_DIR/chroot/build/$BOARD/var/cache/portage/sys-kernel/chromeos-kernel-4_19/Module.symvers $MODULE_EXPORT_DIR/modules/$kver
 
 cd $MODULE_EXPORT_DIR
 tar -czf modules.tar.gz modules

@@ -5,7 +5,7 @@ In addition to Surface related kernel configs (search by SURFACE in `make menuco
 ```bash
 Surface related kernel configs
 - All items found by searching SURFACE
-- SURFACE_ACPI_SSH dependency:
+- SURFACE_SAM_SSH dependency:
   - SERIAL_8250
   - SERIAL_8250_DW
   - SERIAL_DEV_CTRL_TTYPORT

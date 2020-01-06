@@ -177,6 +177,9 @@ cros_workon_make --board=${BOARD} chromeos-kernel-$KVER --install
 ### copy the built kernel
 exit # (outside cros_sdk)
 export WORKING_BRANCH=chromeos-surface
+export KVER=4_19 # kernel version you want to build
+export KVER_PERIOD=$(echo $KVER | sed s/_/./)
+
 cd /home/ubuntu/chromiumos/src/third_party/kernel/v$KVER_PERIOD
 kver_default=$(git describe --tags | sed 's/-/.r/; s/-g/./')
 export MODULE_EXPORT_DIR=~/modules-$kver_default-stock

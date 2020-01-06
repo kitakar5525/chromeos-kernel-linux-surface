@@ -176,7 +176,6 @@ cros_workon_make --board=${BOARD} chromeos-kernel-$KVER --install
 
 ### copy the built kernel
 exit # (outside cros_sdk)
-export WORKING_BRANCH=chromeos-surface
 export KVER=4_19 # kernel version you want to build
 export KVER_PERIOD=$(echo $KVER | sed s/_/./)
 
@@ -194,8 +193,6 @@ tar -czf modules.tar.gz modules
 cd -
 rm -rf $MODULE_EXPORT_DIR/modules
 # tar -czf ${MODULE_EXPORT_DIR}.tar.gz $MODULE_EXPORT_DIR
-cd ~/trunk/src/third_party/kernel/v$KVER_PERIOD
-git checkout $WORKING_BRANCH # back to your working branch
 ```
 
 - [1]: [List of available firmware - linux-firmware-9999.ebuild](https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/sys-kernel/linux-firmware/linux-firmware-9999.ebuild)

@@ -53,11 +53,13 @@ sudo cp -r linux-firmware-20190628.70e4394-1-any.pkg/usr/lib/firmware/* $HOME/ch
 
 cros_sdk # (inside cros_sdk)
 export BOARD=amd64-generic
+export KVER=4_19 # kernel version you want to build
+export KVER_PERIOD=$(echo $KVER | sed s/_/./)
 
 ### Edit this file:
 #- `~/trunk/src/overlays/overlay-amd64-generic/profiles/base/make.defaults`
 # chenge kernel version if it still uses 4_14
-# kernel-4_14 to kernel-4_19
+# kernel-4_14 to kernel-$KVER
 # add firmware[1]; something like this:
 #-LINUX_FIRMWARE="iwlwifi-all"
 #+LINUX_FIRMWARE="iwlwifi-all adsp_skl i915_skl ipu3_fw marvell-pcie8897"
@@ -66,12 +68,12 @@ git add make.defaults
 git commit -m "Update board make profile"
 
 # run this to workon the build
-cros_workon --board=${BOARD} start sys-kernel/chromeos-kernel-4_19
+cros_workon --board=${BOARD} start sys-kernel/chromeos-kernel-$KVER
 
 
 
 ### apply changes to kernel
-cd ~/trunk/src/third_party/kernel/v4.19
+cd ~/trunk/src/third_party/kernel/v$KVER_PERIOD
 # make a new branch with `repo start` [2][3]:
 export WORKING_BRANCH=chromeos-surface
 repo start $WORKING_BRANCH .
@@ -82,11 +84,11 @@ cd ../
 git clone --depth 1 https://github.com/kitakar5525/linux-surface-patches
 cd -
 # apply lile this:
-# for i in $(find ../linux-surface-patches/patch-chromeos-4.19 -name "*.patch" | sort); do echo "applying $i"; patch -Np1 -i $i; done
+# for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD -name "*.patch" | sort); do echo "applying $i"; patch -Np1 -i $i; done
 # Or, stop if patch command returns non-zero value
-# for i in $(find ../linux-surface-patches/patch-chromeos-4.19/ -name *.patch | sort); do echo "applying $i"; patch -Np1 -i $i; if [ $? -ne 0 ]; then break; fi; done
+# for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD/ -name *.patch | sort); do echo "applying $i"; patch -Np1 -i $i; if [ $? -ne 0 ]; then break; fi; done
 # Or, use `git am`
-for i in $(find ../linux-surface-patches/patch-chromeos-4.19 -name "*.patch" | sort); do git am $i; done
+for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD -name "*.patch" | sort); do git am $i; done
 
 # commit your changes here if you used `patch` command instead of `git am`
 #git add -A
@@ -98,9 +100,9 @@ for i in $(find ../linux-surface-patches/patch-chromeos-4.19 -name "*.patch" | s
 # edit a config[4] found above; in my case, chromiumsos-x86_64:
 #chromeos/scripts/kernelconfig editconfig
 # Or, use my config files
-cp -r ../linux-surface-patches/patch-chromeos-4.19/configs/config-surface/config/base.config chromeos/config
-cp -r ../linux-surface-patches/patch-chromeos-4.19/configs/config-surface/config/x86_64/chromiumos-x86_64.flavour.config chromeos/config/x86_64
-cp -r ../linux-surface-patches/patch-chromeos-4.19/configs/config-surface/config/x86_64/common.config chromeos/config/x86_64
+cp -r ../linux-surface-patches/patch-chromeos-$KVER_PERIOD/configs/config-surface/config/base.config chromeos/config
+cp -r ../linux-surface-patches/patch-chromeos-$KVER_PERIOD/configs/config-surface/config/x86_64/chromiumos-x86_64.flavour.config chromeos/config/x86_64
+cp -r ../linux-surface-patches/patch-chromeos-$KVER_PERIOD/configs/config-surface/config/x86_64/common.config chromeos/config/x86_64
 # If you use my config, make sure CONFIG_EXTRA_FIRMWARE_DIR='/build/amd64-generic/lib/firmware/'
 
 # commit your changes
@@ -109,11 +111,11 @@ git commit -m "Update configs for Surface devices"
 
 # build the kernel!
 make mrproper
-# FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-kernel-4_19 --install
+# FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-kernel-$KVER --install
 # you can change USE flags. See kitakar5525/chromeos-kernel-linux-surface#2
 # remove `tpm` flag to avoid TCG_TIS=y in order to get chrome://flags/ page working on SB1
 # untill we can use hardware tpm.
-USE="${USE} -tpm" FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-kernel-4_19 --install
+USE="${USE} -tpm" FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-kernel-$KVER --install
 ```
 
 
@@ -124,7 +126,9 @@ exit # (outside cros_sdk)
 export REPO_DIR=$(pwd)
 export BOARD=amd64-generic
 export WORKING_BRANCH=chromeos-surface
-cd $REPO_DIR/src/third_party/kernel/v4.19
+export KVER=4_19 # kernel version you want to build
+export KVER_PERIOD=$(echo $KVER | sed s/_/./)
+cd $REPO_DIR/src/third_party/kernel/v$KVER_PERIOD
 kver=$(make kernelversion); echo $kver
 export MODULE_EXPORT_DIR=~/chromeos-kernel-linux-surface-$kver
 mkdir $MODULE_EXPORT_DIR
@@ -143,9 +147,9 @@ git checkout $WORKING_BRANCH # back to your working branch
 cd ~
 cp -r $REPO_DIR/chroot/build/$BOARD/boot $MODULE_EXPORT_DIR
 cp -r $REPO_DIR/chroot/build/$BOARD/lib/modules $MODULE_EXPORT_DIR
-cp -r $REPO_DIR/src/third_party/kernel/v4.19/chromeos/config $MODULE_EXPORT_DIR
+cp -r $REPO_DIR/src/third_party/kernel/v$KVER_PERIOD/chromeos/config $MODULE_EXPORT_DIR
 # for external module building, retrieve Module.symvers
-cp -r $REPO_DIR/chroot/build/$BOARD/var/cache/portage/sys-kernel/chromeos-kernel-4_19/Module.symvers $MODULE_EXPORT_DIR/modules/$kver
+cp -r $REPO_DIR/chroot/build/$BOARD/var/cache/portage/sys-kernel/chromeos-kernel-$KVER/Module.symvers $MODULE_EXPORT_DIR/modules/$kver
 
 cd $MODULE_EXPORT_DIR
 tar -czf modules.tar.gz modules
@@ -160,15 +164,17 @@ rm -rf $MODULE_EXPORT_DIR/modules
 ```bash
 cros_sdk # (inside cros_sdk)
 export BOARD=amd64-generic
-cd ~/trunk/src/third_party/kernel/v4.19
+export KVER=4_19 # kernel version you want to build
+export KVER_PERIOD=$(echo $KVER | sed s/_/./)
+cd ~/trunk/src/third_party/kernel/v$KVER_PERIOD
 export STOCK_BRANCH=m/master
 git checkout $STOCK_BRANCH # back to the branch where your branch derived
 make mrproper
-cros_workon_make --board=${BOARD} chromeos-kernel-4_19 --install
+cros_workon_make --board=${BOARD} chromeos-kernel-$KVER --install
 ### copy the built kernel
 exit # (outside cros_sdk)
 export WORKING_BRANCH=chromeos-surface
-cd /home/ubuntu/chromiumos/src/third_party/kernel/v4.19
+cd /home/ubuntu/chromiumos/src/third_party/kernel/v$KVER_PERIOD
 kver_default=$(git describe --tags | sed 's/-/.r/; s/-g/./')
 export MODULE_EXPORT_DIR=~/modules-$kver_default-stock
 mkdir $MODULE_EXPORT_DIR
@@ -176,13 +182,13 @@ make mrproper
 cd ~
 cp -r $HOME/chromiumos/chroot/build/$BOARD/boot $MODULE_EXPORT_DIR
 cp -r $HOME/chromiumos/chroot/build/$BOARD/lib/modules $MODULE_EXPORT_DIR
-cp -r $HOME/chromiumos/src/third_party/kernel/v4.19/chromeos/config $MODULE_EXPORT_DIR
+cp -r $HOME/chromiumos/src/third_party/kernel/v$KVER_PERIOD/chromeos/config $MODULE_EXPORT_DIR
 cd $MODULE_EXPORT_DIR
 tar -czf modules.tar.gz modules
 cd -
 rm -rf $MODULE_EXPORT_DIR/modules
 # tar -czf ${MODULE_EXPORT_DIR}.tar.gz $MODULE_EXPORT_DIR
-cd ~/trunk/src/third_party/kernel/v4.19
+cd ~/trunk/src/third_party/kernel/v$KVER_PERIOD
 git checkout $WORKING_BRANCH # back to your working branch
 ```
 
@@ -196,22 +202,25 @@ git checkout $WORKING_BRANCH # back to your working branch
 ## How to build a kernel (using `make` command)
 
 ```bash
+export KVER=4_19 # kernel version you want to build
+export KVER_PERIOD=$(echo $KVER | sed s/_/./)
+
 # get the kernel source code
-git clone --depth 1 https://chromium.googlesource.com/chromiumos/third_party/kernel chromeos-4.19 -b chromeos-4.19
+git clone --depth 1 https://chromium.googlesource.com/chromiumos/third_party/kernel chromeos-$KVER_PERIOD -b chromeos-$KVER_PERIOD
 # get the patchset
 git clone --depth 1 https://github.com/kitakar5525/linux-surface-patches
-cd chromeos-4.19
+cd chromeos-$KVER_PERIOD
 # make kernelversion # to check the kernel version
 
 
 
 ### apply the patchset
-#for i in $(find ../linux-surface-patches/patch-chromeos-4.19 -name "*.patch" | sort); do echo "applying $i"; patch -Np1 -i $i; done
+#for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD -name "*.patch" | sort); do echo "applying $i"; patch -Np1 -i $i; done
 # commit the patch (locally) to avoid getting `-dirty` in the kernel version
 #git add -A
 #git commit -m "surface-patches"
 # Or, just use `git am`
-for i in $(find ../linux-surface-patches/patch-chromeos-4.19 -name "*.patch" | sort); do git am $i; done
+for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD -name "*.patch" | sort); do git am $i; done
 
 
 
@@ -224,7 +233,7 @@ for i in $(find ../linux-surface-patches/patch-chromeos-4.19 -name "*.patch" | s
 # See below section: "Who overwrote the kernel config?"
 # So, let's use a config file which we can get from it.
 # It is included in the patchset.
-cp ../linux-surface-patches/patch-chromeos-4.19/configs/config-surface/config-4.19.* ./.config
+cp ../linux-surface-patches/patch-chromeos-$KVER_PERIOD/configs/config-surface/config-$KVER_PERIOD.* ./.config
 make oldconfig
 # Edit config here
 # Especially, if you use my config, CONFIG_EXTRA_FIRMWARE_DIR='/lib/firmware'

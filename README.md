@@ -128,6 +128,7 @@ export BOARD=amd64-generic
 export WORKING_BRANCH=chromeos-surface
 export KVER=4_19 # kernel version you want to build
 export KVER_PERIOD=$(echo $KVER | sed s/_/./)
+
 cd $REPO_DIR/src/third_party/kernel/v$KVER_PERIOD
 kver=$(make kernelversion); echo $kver
 export MODULE_EXPORT_DIR=~/chromeos-kernel-linux-surface-$kver
@@ -166,11 +167,13 @@ cros_sdk # (inside cros_sdk)
 export BOARD=amd64-generic
 export KVER=4_19 # kernel version you want to build
 export KVER_PERIOD=$(echo $KVER | sed s/_/./)
+
 cd ~/trunk/src/third_party/kernel/v$KVER_PERIOD
 export STOCK_BRANCH=m/master
 git checkout $STOCK_BRANCH # back to the branch where your branch derived
 make mrproper
 cros_workon_make --board=${BOARD} chromeos-kernel-$KVER --install
+
 ### copy the built kernel
 exit # (outside cros_sdk)
 export WORKING_BRANCH=chromeos-surface

@@ -88,7 +88,7 @@ cd -
 # Or, stop if patch command returns non-zero value
 # for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD/ -name *.patch | sort); do echo "applying $i"; patch -Np1 -i $i; if [ $? -ne 0 ]; then break; fi; done
 # Or, use `git am`
-for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD -name "*.patch" | sort); do git am $i; done
+for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD -name "*.patch" | sort); do git am -3 $i; done
 
 # commit your changes here if you used `patch` command instead of `git am`
 #git add -A
@@ -223,7 +223,7 @@ cd chromeos-$KVER_PERIOD
 #git add -A
 #git commit -m "surface-patches"
 # Or, just use `git am`
-for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD -name "*.patch" | sort); do git am $i; done
+for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD -name "*.patch" | sort); do git am -3 $i; done
 
 
 

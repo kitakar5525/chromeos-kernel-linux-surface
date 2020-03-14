@@ -27,6 +27,12 @@ Especially, board `amd64-generic` is located at
 /build/amd64-generic/var/cache/portage/sys-kernel/
 ```
 
+### Install linux-firmware to build chroot
+
+```bash
+emerge-$BOARD linux-firmware
+```
+
 ### Uninstall packages from build chroot
 
 It seems that you can't install both 4.19 and 5.4 kernels into build chroot at the same time.

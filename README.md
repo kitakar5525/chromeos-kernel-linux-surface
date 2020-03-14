@@ -120,6 +120,12 @@ USE="${USE} -tpm" FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-
 
 
 ### How to retrieve the built kernel and config to your (outside cros_sdk chroot) home directory?
+
+install dependencies first:
+```bash
+sudo apt install make gcc flex bison
+```
+
 ```bash
 ### Copy the built kernel
 exit # (outside cros_sdk)

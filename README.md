@@ -182,6 +182,7 @@ cros_workon_make --board=${BOARD} chromeos-kernel-$KVER --install
 
 ### copy the built kernel
 exit # (outside cros_sdk)
+export BOARD=amd64-generic
 export KVER=4_19 # kernel version you want to build
 export KVER_PERIOD=$(echo $KVER | sed s/_/./)
 

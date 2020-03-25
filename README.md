@@ -266,6 +266,8 @@ make modules_install # exported to $INSTALL_MOD_PATH
 make install # exported to $INSTALL_PATH
 # remove build and source links
 rm "$modulesdir"/{source,build}
+
+cp Module.symvers ../modules-$kernver # for external module building
 ```
 
 

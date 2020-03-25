@@ -255,6 +255,7 @@ make menuconfig
 
 kernver="$(make -s kernelrelease)"
 export INSTALL_MOD_PATH=../modules-$kernver
+export INSTALL_PATH=../modules-$kernver
 export INSTALL_MOD_STRIP=1 # to reduce the modules size (one example: 487M -> 35M)
 modulesdir="$INSTALL_MOD_PATH/lib/modules/$kernver"
 
@@ -262,14 +263,9 @@ modulesdir="$INSTALL_MOD_PATH/lib/modules/$kernver"
 make -j$(nproc --all) bzImage modules
 # export the built modules
 make modules_install # exported to $INSTALL_MOD_PATH
+make install # exported to $INSTALL_PATH
 # remove build and source links
 rm "$modulesdir"/{source,build}
-
-
-
-### copy bzImage and config
-cp arch/x86/boot/bzImage $INSTALL_MOD_PATH/vmlinuz-$kernver
-cp .config $INSTALL_MOD_PATH/config-$kernver
 ```
 
 

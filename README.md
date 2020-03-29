@@ -79,6 +79,9 @@ make install # exported to $INSTALL_PATH
 rm "$modulesdir"/{source,build}
 
 cp Module.symvers ../modules-$kernver # for external module building
+
+# compress the whole dir
+tar -czf ${INSTALL_PATH}.tar.gz $INSTALL_PATH
 ```
 
 

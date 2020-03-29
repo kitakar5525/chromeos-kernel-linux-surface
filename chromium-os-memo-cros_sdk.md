@@ -1,4 +1,4 @@
-## memo
+## memo for building kernel using cros_sdk
 
 ### List of boards
 

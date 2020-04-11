@@ -65,8 +65,8 @@ make menuconfig
 
 
 kernver="$(make -s kernelrelease)"
-export INSTALL_MOD_PATH=../modules-$kernver
-export INSTALL_PATH=../modules-$kernver
+export INSTALL_MOD_PATH=../modules-$kernver # modules will be exported to $INSTALL_MOD_PATH/lib/modules/$kernver
+export INSTALL_PATH=../modules-$kernver/boot; mkdir -p $INSTALL_PATH # vmlinuz, config, System.map
 export INSTALL_MOD_STRIP=1 # to reduce the modules size (one example: 487M -> 35M)
 modulesdir="$INSTALL_MOD_PATH/lib/modules/$kernver"
 
@@ -78,10 +78,13 @@ make install # exported to $INSTALL_PATH
 # remove build and source links
 rm "$modulesdir"/{source,build}
 
-cp Module.symvers ../modules-$kernver # for external module building
+mkdir "$modulesdir"/build
+cp Module.symvers "$modulesdir"/build # for external module building
+cp $INSTALL_PATH/config-${kernver} "$modulesdir"/build/.config
+cp $INSTALL_PATH/System.map-${kernver} "$modulesdir"/build/System.map
 
 # compress the whole dir
-tar -czf ${INSTALL_PATH}.tar.gz $INSTALL_PATH
+tar -czf ${INSTALL_MOD_PATH}.tar.gz $INSTALL_MOD_PATH && rm -rf $INSTALL_MOD_PATH
 ```
 
 

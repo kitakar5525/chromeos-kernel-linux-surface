@@ -97,16 +97,19 @@ sudo apt install make gcc flex bison
 ```bash
 ### Copy the built kernel
 exit # (outside cros_sdk)
-export REPO_DIR=$(pwd)
+export REPO_DIR=~/chromiumos # change if not
 export BOARD=amd64-generic
 export WORKING_BRANCH=chromeos-surface
 export KVER=4_19 # kernel version you want to build
 export KVER_PERIOD=$(echo $KVER | sed s/_/./)
 
 cd $REPO_DIR/src/third_party/kernel/v$KVER_PERIOD
-kver=$(make kernelversion); echo $kver
-export MODULE_EXPORT_DIR=~/chromeos-kernel-linux-surface-$kver
+git checkout $WORKING_BRANCH
+kernver=$(make kernelversion); echo $kernver
+export MODULE_EXPORT_DIR=~/chromeos-kernel-linux-surface-$kernver
+modulesdir="$MODULE_EXPORT_DIR/lib/modules/$kernver"
 mkdir $MODULE_EXPORT_DIR
+mkdir $MODULE_EXPORT_DIR/lib
 
 ### extra: if you want, copy default configs
 export STOCK_BRANCH=m/master
@@ -119,18 +122,25 @@ cp -r chromeos/config $MODULE_EXPORT_DIR/configs-$kver_default-default/
 make mrproper
 git checkout $WORKING_BRANCH # back to your working branch
 
-cd ~
-cp -r $REPO_DIR/chroot/build/$BOARD/boot $MODULE_EXPORT_DIR
-cp -r $REPO_DIR/chroot/build/$BOARD/lib/modules $MODULE_EXPORT_DIR
-cp -r $REPO_DIR/src/third_party/kernel/v$KVER_PERIOD/chromeos/config $MODULE_EXPORT_DIR
-# for external module building, retrieve Module.symvers
-cp -r $REPO_DIR/chroot/build/$BOARD/var/cache/portage/sys-kernel/chromeos-kernel-$KVER/Module.symvers $MODULE_EXPORT_DIR/modules/$kver
-
-cd $MODULE_EXPORT_DIR
-tar -czf modules.tar.gz modules
 cd -
-rm -rf $MODULE_EXPORT_DIR/modules
-# tar -czf ${MODULE_EXPORT_DIR}.tar.gz $MODULE_EXPORT_DIR # compress the whole directory if you want
+cp -r $REPO_DIR/chroot/build/$BOARD/boot $MODULE_EXPORT_DIR
+cp -r $REPO_DIR/chroot/build/$BOARD/lib/modules $MODULE_EXPORT_DIR/lib
+rm "$modulesdir"/{source,build} # remove build and source links
+cp -r $REPO_DIR/src/third_party/kernel/v$KVER_PERIOD/chromeos/config $MODULE_EXPORT_DIR
+
+mkdir "$modulesdir"/build
+mkdir "$modulesdir"/build/chromeos
+cp -r $REPO_DIR/chroot/build/$BOARD/var/cache/portage/sys-kernel/chromeos-kernel-$KVER/Module.symvers "$modulesdir"/build # for external module building, retrieve Module.symvers
+cp $MODULE_EXPORT_DIR/boot/config-${kernver} "$modulesdir"/build/.config
+cp $MODULE_EXPORT_DIR/boot/System.map-${kernver} "$modulesdir"/build/System.map
+cp -r $MODULE_EXPORT_DIR/config "$modulesdir"/build/chromeos
+cp -r $MODULE_EXPORT_DIR/configs-$kver_default-default "$modulesdir"/build/chromeos
+
+# compress the whole directory
+# using basename to remove path to home dir in archive
+cd ~/
+tar -czf ${MODULE_EXPORT_DIR}.tar.gz $(basename $MODULE_EXPORT_DIR) && rm -rf $MODULE_EXPORT_DIR
+cd -
 ```
 
 

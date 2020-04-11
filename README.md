@@ -63,10 +63,9 @@ make oldconfig
 make menuconfig
 
 
-
 kernver="$(make -s kernelrelease)"
-export INSTALL_MOD_PATH=../modules-$kernver # modules will be exported to $INSTALL_MOD_PATH/lib/modules/$kernver
-export INSTALL_PATH=../modules-$kernver/boot; mkdir -p $INSTALL_PATH # vmlinuz, config, System.map
+export INSTALL_MOD_PATH=../chromeos-kernel-linux-surface-$kernver # modules will be exported to $INSTALL_MOD_PATH/lib/modules/$kernver
+export INSTALL_PATH=../chromeos-kernel-linux-surface-$kernver/boot; mkdir -p $INSTALL_PATH # vmlinuz, config, System.map
 export INSTALL_MOD_STRIP=1 # to reduce the modules size (one example: 487M -> 35M)
 modulesdir="$INSTALL_MOD_PATH/lib/modules/$kernver"
 

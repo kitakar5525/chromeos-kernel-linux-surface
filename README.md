@@ -83,8 +83,10 @@ cp Module.symvers "$modulesdir"/build # for external module building
 cp $INSTALL_PATH/config-${kernver} "$modulesdir"/build/.config
 cp $INSTALL_PATH/System.map-${kernver} "$modulesdir"/build/System.map
 
-# compress the whole dir
-tar -czf ${INSTALL_MOD_PATH}.tar.gz $INSTALL_MOD_PATH && rm -rf $INSTALL_MOD_PATH
+# compress lib dir
+tar -C $INSTALL_MOD_PATH -czf $INSTALL_MOD_PATH/lib.tar.gz lib && rm -rf $INSTALL_MOD_PATH/lib
+# compress the whole dir if you want
+# tar -czf ${INSTALL_MOD_PATH}.tar.gz $INSTALL_MOD_PATH && rm -rf $INSTALL_MOD_PATH
 ```
 
 

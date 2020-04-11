@@ -138,9 +138,7 @@ cp -r $MODULE_EXPORT_DIR/configs-$kver_default-default "$modulesdir"/build/chrom
 
 # compress the whole directory
 # using basename to remove path to home dir in archive
-cd ~/
-tar -czf ${MODULE_EXPORT_DIR}.tar.gz $(basename $MODULE_EXPORT_DIR) && rm -rf $MODULE_EXPORT_DIR
-cd -
+tar -C ~/ -czf ${MODULE_EXPORT_DIR}.tar.gz $(basename $MODULE_EXPORT_DIR) && rm -rf $MODULE_EXPORT_DIR
 ```
 
 

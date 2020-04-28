@@ -65,7 +65,7 @@ make menuconfig
 
 kernver="$(make -s kernelrelease)"
 export INSTALL_MOD_PATH=../chromeos-kernel-linux-surface-$kernver # modules will be exported to $INSTALL_MOD_PATH/lib/modules/$kernver
-export INSTALL_PATH=../chromeos-kernel-linux-surface-$kernver/boot; mkdir -p $INSTALL_PATH # vmlinuz, config, System.map
+export INSTALL_PATH=../chromeos-kernel-linux-surface-$kernver/boot; mkdir -p $INSTALL_PATH 
 export INSTALL_MOD_STRIP=1 # to reduce the modules size (one example: 487M -> 35M)
 modulesdir="$INSTALL_MOD_PATH/lib/modules/$kernver"
 
@@ -73,12 +73,20 @@ modulesdir="$INSTALL_MOD_PATH/lib/modules/$kernver"
 make -j$(nproc --all) bzImage modules
 # export the built modules
 make modules_install # exported to $INSTALL_MOD_PATH
-make install # exported to $INSTALL_PATH
 # remove build and source links
 rm "$modulesdir"/{source,build}
 
+# copy vmlinuz, System.map, and config
+# not using `make install` because it seems that depending on distros
+# used to build the kernel, config may not be installed.
+# Filename may also vary. So, explicitly copy them manually...
+cp arch/x86_64/boot/bzImage $INSTALL_PATH/vmlinuz-${kernver}
+cp System.map* $INSTALL_PATH/System.map-${kernver}
+cp .config $INSTALL_PATH/config-${kernver}
+
+# copy files to build/ for external module building
 mkdir "$modulesdir"/build
-cp Module.symvers "$modulesdir"/build # for external module building
+cp Module.symvers "$modulesdir"/build
 cp $INSTALL_PATH/config-${kernver} "$modulesdir"/build/.config
 cp $INSTALL_PATH/System.map-${kernver} "$modulesdir"/build/System.map
 

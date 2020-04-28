@@ -1,6 +1,6 @@
 ## generating generic kernel config (for use with generic x86 PCs including Surface devices)
 
-Using Arch Linux config as a base. Merge linux-surface config chromiumos-x86_64 config and my changes.
+Using Arch Linux config as a base. Merge linux-surface config, chromiumos-x86_64 config and my changes using `scripts/kconfig/merge_config.sh` which is available in Linux kernel tree.
 
 ```bash
 # arch-lts419 kernel config

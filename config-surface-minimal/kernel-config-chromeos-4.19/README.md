@@ -2,6 +2,9 @@
 
 In addition to Surface related kernel configs (search by SURFACE in `make menuconfig`), you need to change a lot to use on Surface Book 1 / Surface 3.
 
+The `config` directory contains the actual generated config files.
+TODO: create splitconfig.
+
 ```bash
 Surface related kernel configs
 - All items found by searching SURFACE
@@ -24,9 +27,6 @@ Cherry Trail related
 - INTEL_CHT_INT33FE dependency:
   - REGULATOR
   - CHARGER_BQ24190
-  - USB_ROLE_SWITCH # (new dependency on 5.4?)
-    - USB_ROLES_INTEL_XHCI # (new dependency on 5.4?)
-  - TYPEC_MUX_PI3USB30532 # (new dependency on 5.4?)
 - GPIO_CRYSTAL_COVE dependency:
   - INTEL_SOC_PMIC
 
@@ -43,10 +43,10 @@ Backlight control on Surface 3
   - CONFIG_PWM_LPSS_PLATFORM
 - CONFIG_PWM_CRC
   - INTEL_SOC_PMIC
-- DRM_I915 =m # (still need to be m on 5.4?)
-  - INTEL_IPTS =m # (if exist)
+- DRM_I915 =m
+  - INTEL_IPTS =m
 
-For IPTS (if exist) on SB1 to work
+For IPTS on SB1 to work
 - DRM_I915 =m
 - INTEL_MEI_ME =m # (?)
 
@@ -58,8 +58,7 @@ Surface 3 S0ix
 SB1 S0ix
 - MEDIA_CONTROLLER
   - VIDEO_V4L2_SUBDEV_API
-    - STAGING_MEDIA
-      - CONFIG_VIDEO_IPU3_IMGU # need to be as module or embed the firmware to load the firmware
+    - CONFIG_VIDEO_IPU3_IMGU # need to be as module or embed the firmware to load the firmware
     - CONFIG_VIDEO_IPU3_CIO2
 - CONFIG_INTEL_PCH_THERMAL
 
@@ -78,7 +77,7 @@ HID sensors
     - HID_SENSOR_GYRO_3D
 
 Fix ACPI error on Surface 3
-- SENSORS_CORETEMP =m # (still needed on 5.4?)
+- SENSORS_CORETEMP =m
 
 Embed firmware
 #If you specify ipts firmwares here, remember to copy `/lib/firmware/intel/ipts` to your build machine.
@@ -89,7 +88,7 @@ CONFIG_EXTRA_FIRMWARE ='intel/ipu3-fw.bin'
 # - CONFIG_EXTRA_FIRMWARE_DIR ='/lib/firmware'
 - CONFIG_EXTRA_FIRMWARE_DIR ='/build/amd64-generic/lib/firmware/' # if you are in cros_sdk
 
-Fix HID related errors after s2idle (to reload module after suspend) # (still needed on 5.4?)
+Fix HID related errors after s2idle (to reload module after suspend)
 - I2C_HID =m
 - USB_HID =m
 

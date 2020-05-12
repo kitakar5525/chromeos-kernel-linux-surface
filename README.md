@@ -71,6 +71,12 @@ modulesdir="$INSTALL_MOD_PATH/lib/modules/$kernver"
 
 ### build the kernel
 make -j$(nproc --all) bzImage modules
+
+# do not continue if error occurred on make
+if [[ $? -ne 0  ]]; then
+  exit
+fi
+
 # export the built modules
 make modules_install # exported to $INSTALL_MOD_PATH
 # remove build and source links

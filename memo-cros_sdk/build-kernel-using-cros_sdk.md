@@ -4,36 +4,10 @@ you need to setup `cros_sdk` environment first:
 - [Chromium OS Docs - Chromium OS Developer Guide](https://chromium.googlesource.com/chromiumos/docs/+/master/developer_guide.md)
 
 ```bash
-# before entering chroot, I recommend to include your Linux distribution's firmware
-# Especially, don't forget to add IPTS firmware
-# sudo cp -r /lib/firmware/* $HOME/chromiumos/chroot/build/amd64-generic/lib/firmware/
-# Or, clone it from kernel.org
-cd ~
-# git clone --depth 1 https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-# sudo cp -r linux-firmware/* $HOME/chromiumos/chroot/build/amd64-generic/lib/firmware/
-# Or, from arch
-wget --trust-server-names https://www.archlinux.org/packages/core/any/linux-firmware/download/
-mkdir linux-firmware-20190628.70e4394-1-any.pkg
-tar -xf linux-firmware-20190628.70e4394-1-any.pkg.tar.xz -C linux-firmware-20190628.70e4394-1-any.pkg
-# don't forget to add ipts firmware
-cp -r ipts linux-firmware-20190628.70e4394-1-any.pkg/usr/lib/firmware/intel/
-sudo cp -r linux-firmware-20190628.70e4394-1-any.pkg/usr/lib/firmware/* $HOME/chromiumos/chroot/build/amd64-generic/lib/firmware/
-
 cros_sdk # (inside cros_sdk)
 export BOARD=amd64-generic
 export KVER=4_19 # kernel version you want to build
 export KVER_PERIOD=$(echo $KVER | sed s/_/./)
-
-### Edit this file:
-#- `~/trunk/src/overlays/overlay-amd64-generic/profiles/base/make.defaults`
-# chenge kernel version if it still uses 4_14
-# kernel-4_14 to kernel-$KVER
-# add firmware[1]; something like this:
-#-LINUX_FIRMWARE="iwlwifi-all"
-#+LINUX_FIRMWARE="iwlwifi-all adsp_skl i915_skl ipu3_fw marvell-pcie8897"
-# and commit your changes
-git add make.defaults
-git commit -m "Update board make profile"
 
 # run this to workon the build
 cros_workon --board=${BOARD} start sys-kernel/chromeos-kernel-$KVER
@@ -51,27 +25,15 @@ repo start $WORKING_BRANCH .
 cd ../
 git clone --depth 1 https://github.com/kitakar5525/linux-surface-patches
 cd -
-# apply lile this:
-# for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD -name "*.patch" | sort); do echo "applying $i"; patch -Np1 -i $i; done
-# Or, stop if patch command returns non-zero value
-# for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD/ -name *.patch | sort); do echo "applying $i"; patch -Np1 -i $i; if [ $? -ne 0 ]; then break; fi; done
-# Or, use `git am`
+# apply like this:
 for i in $(find ../linux-surface-patches/patch-chromeos-$KVER_PERIOD -name "*.patch" | sort); do git am -3 $i; done
-
-# commit your changes here if you used `patch` command instead of `git am`
-#git add -A
-#git commit -m "Apply Surface patch set"
 
 ### edit kernel config
 # check what config file is needed
 # grep CHROMEOS_KERNEL_SPLITCONFIG ~/trunk/src/overlays/overlay-amd64-generic/profiles/base/make.defaults
 # edit a config[4] found above; in my case, chromiumsos-x86_64:
 #chromeos/scripts/kernelconfig editconfig
-# Or, use my config files
-cp -r ../linux-surface-patches/patch-chromeos-$KVER_PERIOD/configs/config-surface/config/base.config chromeos/config
-cp -r ../linux-surface-patches/patch-chromeos-$KVER_PERIOD/configs/config-surface/config/x86_64/chromiumos-x86_64.flavour.config chromeos/config/x86_64
-cp -r ../linux-surface-patches/patch-chromeos-$KVER_PERIOD/configs/config-surface/config/x86_64/common.config chromeos/config/x86_64
-# If you use my config, make sure CONFIG_EXTRA_FIRMWARE_DIR='/build/amd64-generic/lib/firmware/'
+# Or, use my config files, which are in this repo.
 
 # commit your changes
 git add -A
@@ -79,10 +41,9 @@ git commit -m "Update configs for Surface devices"
 
 # build the kernel!
 make mrproper
-# FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-kernel-$KVER --install
 # you can change USE flags. See kitakar5525/chromeos-kernel-linux-surface#2
 # remove `tpm` flag to avoid TCG_TIS=y in order to get chrome://flags/ page working on SB1
-# untill we can use hardware tpm.
+# until we can use hardware tpm.
 USE="${USE} -tpm" FEATURES="noclean" cros_workon_make --board=${BOARD} chromeos-kernel-$KVER --install
 ```
 

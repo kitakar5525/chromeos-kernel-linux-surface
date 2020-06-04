@@ -1,0 +1,1 @@
+This information may be out of date as I don't use `cros_sdk` to build the kernel anymore. 

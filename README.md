@@ -13,8 +13,6 @@ linux-surface kernel for Chromium OS/Chrome OS based OSes.
 - [chromeos-kernel-linux-surface](#chromeos-kernel-linux-surface)
     - [How to build a kernel (using `make` command)](#how-to-build-a-kernel-using-make-command)
     - [How to install the module and vmlinuz](#how-to-install-the-module-and-vmlinuz)
-    - [Notes](#notes)
-        - [Direct firmware load for *firmware file* failed with error -2](#direct-firmware-load-for-firmware-file-failed-with-error--2)
 
 <!-- /TOC -->
 
@@ -107,25 +105,3 @@ tar -czf ${INSTALL_MOD_PATH}.tar.gz $INSTALL_MOD_PATH && rm -rf $INSTALL_MOD_PAT
 ## How to install the module and vmlinuz
 
 copy the module into `ROOT-A/lib/modules` and copy the vmlinuz to `EFI-SYSTEM/syslinux/vmlinuz.A`
-
-
-
-
-
-
-
-
-
-
-## Notes
-
-### Direct firmware load for *firmware file* failed with error -2
-
-The message will appear when the driver is built as built-in maybe because the driver loads too early and root filesystem is not mounted yet.
-
-Build the driver as module or use `CONFIG_EXTRA_FIRMWARE`
-
-
-
-References
-- [[SOLVED] LFS - direct firmware load failed error -2](https://www.linuxquestions.org/questions/linux-from-scratch-13/lfs-direct-firmware-load-failed-error-2-a-4175587686/#post5594478)

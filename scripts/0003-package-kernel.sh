@@ -73,12 +73,6 @@ if [[ ! $? == 0 ]]; then
   exit -1
 fi
 
-which fakeroot > /dev/null
-if [[ ! $? == 0 ]]; then
-  echo "$0: this script depends on fakeroot but not available, aborting"
-  exit -1
-fi
-
 KERN_VER="$(make kernelrelease)"
 cd ..
 
@@ -86,7 +80,6 @@ cd ..
 deb2targz *.deb
 LIST_DEB2TARGZ=$(ls *$KERN_VER*.tar.*) # file names list of the tar archives
 
-# to preserve permissions, run with fakeroot
-fakeroot package_root_a
-fakeroot package_root_c
-fakeroot cleanup
+package_root_a
+package_root_c
+cleanup

@@ -3,7 +3,6 @@
 linux-surface kernel for chromiumos.
 
 - using linux-surface (https://github.com/linux-surface/linux-surface) patches
-
 - patches actually used is here: [kitakar5525/linux-surface-patches](https://github.com/kitakar5525/linux-surface-patches)
 - kernel trees actually used is here: [Releases · kitakar5525/linux-surface-kernel](https://github.com/kitakar5525/linux-surface-kernel/releases)
 
@@ -23,6 +22,14 @@ fakeroot -- bash scripts/0003-package-kernel.sh
 
 
 
-## How to install the module and vmlinuz
+## How to install?
 
-copy the module into `ROOT-A/lib/modules` and copy the vmlinuz to `EFI-SYSTEM/syslinux/vmlinuz.A`
+If you want to install my prebuilt kernel release, take a look at each release page (https://github.com/kitakar5525/chromeos-kernel-linux-surface/releases); installation varies from release to release.
+
+Below is the general instructions:
+
+### (chromiumos)
+copy module dir into `ROOT-A/lib/modules` and copy vmlinuz to `EFI-SYSTEM/syslinux/vmlinuz.A`
+
+### (brunch)
+copy module dir into `ROOT-C/lib/modules` and copy vmlinuz to `ROOT-C/kernel`

@@ -24,7 +24,7 @@ fakeroot -- bash scripts/0003-package-kernel.sh
 
 ## How to install?
 
-If you want to install my prebuilt kernel release, take a look at each release page (https://github.com/kitakar5525/chromeos-kernel-linux-surface/releases); installation varies from release to release.
+If you want to install my prebuilt kernel release, take a look at each release page (https://github.com/kitakar5525/chromeos-kernel-linux-surface/releases); installation varies from release to release because I'm trying to improve packaging.
 
 Below is the general instructions:
 

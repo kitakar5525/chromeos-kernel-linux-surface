@@ -9,7 +9,7 @@
 #
 # read config fragment file from $1 and overwrite $1.
 #
-cleanup_config_flagment ()
+cleanup_config_fragment ()
 {
     # reduce output from merge_config.sh
     ## remove comments
@@ -35,7 +35,7 @@ cleanup_config_flagment ()
 # linux-surface-lts54 kernel config fragment
 wget https://raw.githubusercontent.com/linux-surface/linux-surface/master/configs/surface-5.4.config \
      -q --show-progress -O config_surface-lts54-fragment
-cleanup_config_flagment config_surface-lts54-fragment
+cleanup_config_fragment config_surface-lts54-fragment
 
 # generate chromiumos-x86_64 fragment
 chromeos/scripts/prepareconfig chromiumos-x86_64
@@ -264,7 +264,7 @@ CONFIG_DRM_I915_GVT_KVMGT=y
 CONFIG_INTEL_MEI_WDT=y
 CONFIG_DPTF_POWER=y
 EOS
-cleanup_config_flagment config_minimal-surface-54-fragment
+cleanup_config_fragment config_minimal-surface-54-fragment
 
 cat << EOS
 # memo
@@ -337,7 +337,7 @@ CONFIG_IWLMVM=m
 CONFIG_IWLWIFI_DEBUG=y
 CONFIG_IWLWIFI_DEBUGFS=y
 EOS
-cleanup_config_flagment config_mychanges-fragment
+cleanup_config_fragment config_mychanges-fragment
 
 
 

@@ -27,3 +27,11 @@ EOS
 fi
 
 make -j$(nproc) bindeb-pkg
+
+# collect generated files into one dir
+## TODO: better way to do so?
+KERN_VER="$(make kernelrelease)"
+cd ..
+LIST_GENERATED=$(ls *$KERN_VER*)
+mkdir $KERN_VER
+mv $(echo $LIST_GENERATED) $KERN_VER/

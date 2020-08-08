@@ -41,9 +41,9 @@ wget https://raw.githubusercontent.com/linux-surface/linux-surface/master/config
      -q --show-progress -O config_surface-lts419-fragment
 cleanup_config_fragment config_surface-lts419-fragment
 
-# generate chromiumos-x86_64 fragment
-chromeos/scripts/prepareconfig chromiumos-x86_64
-mv .config config_chromiumos-x86_64-prepareconfig
+# generate chromeos-intel-pineview fragment
+chromeos/scripts/prepareconfig chromeos-intel-pineview
+mv .config config_chromeos-intel-pineview-prepareconfig
 
 # my config changes. you can also place your changes here if you want.
 cat << EOS > config_mychanges-fragment
@@ -116,7 +116,7 @@ CONFIG_KERNEL_GZIP=y
 
 # resolve "Actual value" not changing to "Requested value"
 # caused by "NETFILTER_XT_MATCH_OWNER is not set"
-# not specified in chromiumos-x86_64 prepareconfig
+# not specified in chromeos-intel-pineview prepareconfig
 # (arc continuously crashing without this change at least on 4.19)
 # CONFIG_NETFILTER_XT_MATCH_OWNER is not set
 CONFIG_NETFILTER_XT_MATCH_QTAGUID=y
@@ -152,7 +152,7 @@ EOS
 ## a lot of output for the first time. So, using `> /dev/null`
 scripts/kconfig/merge_config.sh \
     config_archlinux-lts419 \
-    config_chromiumos-x86_64-prepareconfig \
+    config_chromeos-intel-pineview-prepareconfig \
     config_surface-lts419-fragment \
     config_mychanges-fragment \
     > /dev/null
@@ -161,12 +161,12 @@ scripts/kconfig/merge_config.sh \
 ## you may be interested in "Requested value" vs "Actual value".
 scripts/kconfig/merge_config.sh \
     .config \
-    config_chromiumos-x86_64-prepareconfig \
+    config_chromeos-intel-pineview-prepareconfig \
     config_surface-lts419-fragment \
     config_mychanges-fragment \
 
 # clean up
 rm config_archlinux-lts419
-rm config_chromiumos-x86_64-prepareconfig
+rm config_chromeos-intel-pineview-prepareconfig
 rm config_surface-lts419-fragment
 rm config_mychanges-fragment

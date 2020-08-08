@@ -37,9 +37,9 @@ wget https://raw.githubusercontent.com/linux-surface/linux-surface/master/config
      -q --show-progress -O config_surface-lts54-fragment
 cleanup_config_fragment config_surface-lts54-fragment
 
-# generate chromiumos-x86_64 fragment
-chromeos/scripts/prepareconfig chromiumos-x86_64
-mv .config config_chromiumos-x86_64-prepareconfig
+# generate chromeos-intel-pineview fragment
+chromeos/scripts/prepareconfig chromeos-intel-pineview
+mv .config config_chromeos-intel-pineview-prepareconfig
 
 # When building with cros_sdk, it sets some configs dynamically.
 # https://chromium.googlesource.com/chromiumos/overlays/chromiumos-overlay/+/master/eclass/cros-kernel2.eclass
@@ -355,13 +355,13 @@ cleanup_config_fragment config_mychanges-fragment
 
 # you may be interested in "Requested value" vs "Actual value".
 scripts/kconfig/merge_config.sh \
-    config_chromiumos-x86_64-prepareconfig \
+    config_chromeos-intel-pineview-prepareconfig \
     config_surface-lts54-fragment \
     config_minimal-surface-54-fragment \
     config_mychanges-fragment \
 
 # clean up
-rm config_chromiumos-x86_64-prepareconfig
+rm config_chromeos-intel-pineview-prepareconfig
 rm config_surface-lts54-fragment
 rm config_minimal-surface-54-fragment
 rm config_mychanges-fragment

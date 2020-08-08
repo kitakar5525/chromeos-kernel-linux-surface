@@ -102,6 +102,17 @@ CONFIG_TCG_TIS_SPI=m
 CONFIG_TCG_VTPM_PROXY=m
 CONFIG_TCG_CRB=m
 CONFIG_TCG_VIRTIO_VTPM=m
+#
+# it seems that, at least on v4.19-minimal config, TCG_CR50 stuff can't
+# be built as module (?) compiler gives the following errors:
+#     ERROR: "cr50_suspend" [drivers/char/tpm/cr50_spi.ko] undefined!
+#     ERROR: "cr50_resume" [drivers/char/tpm/cr50_spi.ko] undefined!
+#     ERROR: "cr50_resume" [drivers/char/tpm/cr50_i2c.ko] undefined!
+#     ERROR: "cr50_suspend" [drivers/char/tpm/cr50_i2c.ko] undefined!
+# for now, just unset them.
+#
+# CONFIG_TCG_CR50_I2C is not set
+# CONFIG_TCG_CR50_SPI is not set
 
 # built-in storage related config
 CONFIG_MMC_BLOCK=y

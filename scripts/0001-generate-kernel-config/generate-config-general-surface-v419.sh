@@ -97,8 +97,10 @@ CONFIG_DRM_I915=m
 # https://github.com/kitakar5525/chromeos-kernel-linux-surface/issues/9
 CONFIG_TCG_TPM=m
 CONFIG_TCG_TIS_CORE=m
-CONFIG_TCG_TIS_SPI=m
 CONFIG_TCG_TIS=m
+CONFIG_TCG_TIS_SPI=m
+CONFIG_TCG_VTPM_PROXY=m
+CONFIG_TCG_CRB=m
 CONFIG_TCG_VIRTIO_VTPM=m
 
 # built-in storage related config

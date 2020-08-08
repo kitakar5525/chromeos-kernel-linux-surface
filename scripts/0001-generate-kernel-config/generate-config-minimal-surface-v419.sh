@@ -292,6 +292,17 @@ cat << EOS > config_mychanges-fragment
 # set a distinguishable kernel name
 CONFIG_LOCALVERSION="-minimal-surface-k5"
 
+#
+# uapi version of ipts driver
+# This config may not exist on surface config yet. So, add it.
+#
+# Note: depending on what ipts version is included on kernel tree, this
+# config may not exist. In that case, CONFIG_TOUCHSCREEN_IPTS (singletouch
+# version) or CONFIG_INTEL_IPTS (guc_submission version) will be used,
+# which are defined in surface config.
+#
+CONFIG_MISC_IPTS=m
+
 # acpi_call config that I added
 CONFIG_5525_ACPI_CALL=y
 

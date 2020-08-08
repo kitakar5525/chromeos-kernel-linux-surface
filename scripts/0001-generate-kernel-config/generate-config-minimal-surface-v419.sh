@@ -161,6 +161,7 @@ CONFIG_INTEL_PCH_THERMAL=y
 
 # TPM (m if you want to use vTPM)
 # https://github.com/kitakar5525/chromeos-kernel-linux-surface/issues/9
+CONFIG_TCG_TPM=m
 CONFIG_TCG_TIS_CORE=m
 CONFIG_TCG_TIS=m
 CONFIG_TCG_TIS_SPI=m

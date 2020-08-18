@@ -45,10 +45,11 @@ generate_init_script_roota() {
   mkdir -p ${pkgdir_roota}/etc/init/
 
   # daemon init file to be placed in ROOT_A/etc/init
-  cat > ${pkgdir_roota}/etc/init/kitakar5525-iptsd.conf << 'INIT_CONF'
+  cat > ${pkgdir_roota}/etc/init/iptsd.conf << 'INIT_CONF'
 # referenced bluetoothd.conf and auditd.conf
 
 description     "Start the ipts daemon"
+# author of this service file. Not the ipts/iptsd itself.
 author          "kitakar5525"
 
 start on started system-services
@@ -58,7 +59,7 @@ respawn
 exec /usr/bin/iptsd
 INIT_CONF
 
-  chmod 0644 ${pkgdir_roota}/etc/init/kitakar5525-iptsd.conf
+  chmod 0644 ${pkgdir_roota}/etc/init/iptsd.conf
 }
 
 generate_patch_file_brunch () {

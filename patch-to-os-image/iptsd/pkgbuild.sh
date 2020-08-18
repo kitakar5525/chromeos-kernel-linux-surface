@@ -27,6 +27,9 @@ prepare() {
   echo "performing git pull..."
   git pull
 
+  # apply patches for chromiumos
+  git am ../0001-finger-multitouch-also-set-ABS_X-and-ABS_Y.patch
+
   # configure pkgver
   pkgver=$(git describe --tags)
 }

@@ -1,0 +1,53 @@
+From df9916b0f56615b505282d6af790e3e56cf76766 Mon Sep 17 00:00:00 2001
+From: Tsuchiya Yuto <kitakar@gmail.com>
+Date: Tue, 18 Aug 2020 22:13:24 +0900
+Subject: [PATCH] finger-multitouch: also set ABS_X and ABS_Y
+
+It seems that ABS_X and ABS_Y are necessary for chromiumos. Without
+those values set, chromiumos doesn't respond to finger touch input.
+
+Signed-off-by: Tsuchiya Yuto <kitakar@gmail.com>
+---
+ devices.go | 12 ++++++++++++
+ touch.go   |  2 ++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/devices.go b/devices.go
+index 6ddb3ed..5909c13 100644
+--- a/devices.go
++++ b/devices.go
+@@ -134,6 +134,18 @@ func IptsDevicesCreateTouch(ipts *IptsContext) (*UinputDevice, error) {
+ 		Resolution: IptsDevicesGetRes(7200, ipts.Config.Height),
+ 	})
+ 
++	dev.SetAbsInfo(ABS_X, UinputAbsInfo{
++		Minimum:    0,
++		Maximum:    9600,
++		Resolution: IptsDevicesGetRes(9600, ipts.Config.Width),
++	})
++
++	dev.SetAbsInfo(ABS_Y, UinputAbsInfo{
++		Minimum:    0,
++		Maximum:    7200,
++		Resolution: IptsDevicesGetRes(7200, ipts.Config.Height),
++	})
++
+ 	err = dev.Create()
+ 	if err != nil {
+ 		return nil, err
+diff --git a/touch.go b/touch.go
+index 5250241..466dfb3 100644
+--- a/touch.go
++++ b/touch.go
+@@ -38,6 +38,8 @@ func IptsTouchHandleHeatmap(ipts *IptsContext, heatmap *Heatmap) error {
+ 		touch.Device.Emit(EV_ABS, ABS_MT_TRACKING_ID, int32(p.Index))
+ 		touch.Device.Emit(EV_ABS, ABS_MT_POSITION_X, int32(p.X))
+ 		touch.Device.Emit(EV_ABS, ABS_MT_POSITION_Y, int32(p.Y))
++		touch.Device.Emit(EV_ABS, ABS_X, int32(p.X))
++		touch.Device.Emit(EV_ABS, ABS_Y, int32(p.Y))
+ 	}
+ 
+ 	err := touch.Device.Emit(EV_SYN, SYN_REPORT, 0)
+-- 
+2.28.0
+

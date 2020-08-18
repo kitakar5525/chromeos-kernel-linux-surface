@@ -3,13 +3,14 @@
 # Recommend running with fakeroot like the following to preserve ownership:
 # $ fakeroot -- bash pkgbuild.sh
 # 
-# ${pkgname}-${pkgver}-ROOT_A.tar.gz package will be created.
+# ${pkgname}-${pkgver}${pkgrel}-ROOT_A.tar.gz package will be created.
 #
 
 pkgname=iptsd
 pkgdir_roota=${pkgname}-ROOT_A
 pkgdir_rootc=${pkgname}-ROOT_C
 # pkgver="" # to be added on prepare()
+pkgrel="+0001-finger-multitouch-also-set-ABS_X-and-ABS_Y"
 
 prepare() {
   echo ">>> prepare()"
@@ -68,7 +69,7 @@ generate_patch_file_brunch () {
 ret=0
 
 # install package onto ROOT
-tar zxf /firmware/packages/kitakar5525-packages/iptsd/${pkgname}-${pkgver}-ROOT_A.tar.gz -C /system
+tar zxf /firmware/packages/kitakar5525-packages/iptsd/${pkgname}-${pkgver}${pkgrel}-ROOT_A.tar.gz -C /system
 if [ ! "$?" -eq 0 ]; then ret=$((ret + (2 ** 0))); fi
 
 exit $ret
@@ -95,7 +96,7 @@ package_roota() {
   install -Dpm 0644 config/* "${pkgdir_roota}/usr/share/ipts"
 
   # generate tarball to be copied onto ROOT_A
-  tar -C ${pkgdir_roota} -czf ${pkgname}-${pkgver}-ROOT_A.tar.gz .
+  tar -C ${pkgdir_roota} -czf ${pkgname}-${pkgver}${pkgrel}-ROOT_A.tar.gz .
 }
 
 package_rootc() {
@@ -105,12 +106,12 @@ package_rootc() {
   mkdir -p ${pkgdir_rootc}/packages/kitakar5525-packages/iptsd ${pkgdir_rootc}/patches
 
   # package ROOT_A things
-  install -Dpm 0644 ${pkgname}-${pkgver}-ROOT_A.tar.gz ${pkgdir_rootc}/packages/kitakar5525-packages/iptsd/
+  install -Dpm 0644 ${pkgname}-${pkgver}${pkgrel}-ROOT_A.tar.gz ${pkgdir_rootc}/packages/kitakar5525-packages/iptsd/
 
   generate_patch_file_brunch
 
   # generate tarball to be copied onto ROOT_C
-  tar -C ${pkgdir_rootc} -czf ${pkgname}-${pkgver}-ROOT_C.tar.gz .
+  tar -C ${pkgdir_rootc} -czf ${pkgname}-${pkgver}${pkgrel}-ROOT_C.tar.gz .
 }
 
 cleanup() {
@@ -118,7 +119,7 @@ cleanup() {
 
   rm -rf ${pkgdir_roota}
   rm -rf ${pkgdir_rootc}
-  rm ${pkgname}-${pkgver}-ROOT_A.tar.gz
+  rm ${pkgname}-${pkgver}${pkgrel}-ROOT_A.tar.gz
 }
 
 prepare
@@ -128,4 +129,4 @@ package_rootc
 cleanup
 
 # move built package out of build dir
-mv ${pkgname}-${pkgver}-ROOT_C.tar.gz ../
+mv ${pkgname}-${pkgver}${pkgrel}-ROOT_C.tar.gz ../

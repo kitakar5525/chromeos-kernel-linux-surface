@@ -335,6 +335,12 @@ CONFIG_SPI_PXA2XX_PCI=m
 # panic and oops
 # CONFIG_PANIC_ON_OOPS is not set
 CONFIG_PANIC_TIMEOUT=0
+
+#
+# enable acpidbg
+#
+CONFIG_ACPI_DEBUGGER=y
+CONFIG_ACPI_DEBUGGER_USER=m
 EOS
 cleanup_config_fragment config_mychanges-fragment
 

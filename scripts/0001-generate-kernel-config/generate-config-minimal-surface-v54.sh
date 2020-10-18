@@ -349,6 +349,12 @@ CONFIG_SPI_PXA2XX_PCI=m
 # CONFIG_PANIC_ON_OOPS is not set
 CONFIG_PANIC_TIMEOUT=0
 
+#
+# enable acpidbg
+#
+CONFIG_ACPI_DEBUGGER=y
+CONFIG_ACPI_DEBUGGER_USER=m
+
 # v5.4 specific
 
 # iwl7000 on AX201 is unstable. For now, use iwlwifi on v5.4 series.

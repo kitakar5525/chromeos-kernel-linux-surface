@@ -22,7 +22,7 @@ if [[ ! $? == 0 ]] && ! is_debian; then
   cat << 'EOS' | sudo tee -a /etc/dpkg/buildpackage.conf
 
 # HACK: ignore deps for non-dpkg based distros
-"no-check-builddeps"
+no-check-builddeps
 EOS
 fi
 
